@@ -28,7 +28,7 @@ const props = defineProps<{
   city: string; // 城市名或城市编码
 }>();
 
-const GAODE_KEY = '3e266c3a1cc478bc9146cfaa0550844a'; // 替换为你的 key
+const GAODE_KEY = '806ca801ce71fb304cd5fbf0bc8b1597'; // 替换为你的 key
 
 const loading = ref(true);
 const error = ref('');

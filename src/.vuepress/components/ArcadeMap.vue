@@ -12,15 +12,19 @@ const props = defineProps<{ place: string }>();
 
 const mapContainer = ref<HTMLDivElement | null>(null);
 const error = ref('');
-const GAODE_KEY = '3e266c3a1cc478bc9146cfaa0550844a'; // 👉 替换为你的实际 key
-const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24小时缓存有效期
+// VuePress 环境变量访问方式
+const GAODE_KEY = '806ca801ce71fb304cd5fbf0bc8b1597';
+const CACHE_EXPIRY = 24 * 60 * 60 * 1000;
 
 // 获取地理编码（带缓存）
 const getGeocode = async (address: string) => {
-  const cacheKey = `amap_geocode_${address}`;
+  if (!GAODE_KEY) {
+    throw new Error('API Key未配置');
+  }
   
-  // 尝试从缓存获取
+  const cacheKey = `amap_geocode_${address}`;
   const cached = localStorage.getItem(cacheKey);
+  
   if (cached) {
     const { data, timestamp } = JSON.parse(cached);
     if (Date.now() - timestamp < CACHE_EXPIRY) {
@@ -28,14 +32,12 @@ const getGeocode = async (address: string) => {
     }
   }
 
-  // 无有效缓存时调用API
   const res = await fetch(
     `https://restapi.amap.com/v3/geocode/geo?key=${GAODE_KEY}&address=${encodeURIComponent(address)}`
   );
   const json = await res.json();
   
-  if (json.geocodes && json.geocodes.length > 0) {
-    // 缓存结果
+  if (json.geocodes?.length > 0) {
     localStorage.setItem(cacheKey, JSON.stringify({
       data: json,
       timestamp: Date.now()
@@ -50,41 +52,44 @@ onMounted(async () => {
   if (typeof window === 'undefined') return;
 
   try {
-    // Step 1: 获取地理编码（带缓存）
+    // API Key 安全检查
+    if (!GAODE_KEY) {
+      error.value = '高德地图API Key未配置';
+      return;
+    }
+
     const geocodeData = await getGeocode(props.place);
-    if (!geocodeData || !geocodeData.geocodes || geocodeData.geocodes.length === 0) {
+    if (!geocodeData?.geocodes?.length) {
       error.value = `未找到地点：${props.place}`;
       return;
     }
 
-    const location = geocodeData.geocodes[0].location; // "114.032921,22.617417"
-    const [lng, lat] = location.split(',');
+    const [lng, lat] = geocodeData.geocodes[0].location.split(',');
 
-    // Step 2: 加载 JS SDK（仅在首次）
+    // 动态加载SDK
     if (!(window as any).AMap) {
-      await new Promise((resolve) => {
+      await new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.src = `https://webapi.amap.com/maps?v=2.0&key=${GAODE_KEY}`;
         script.onload = resolve;
+        script.onerror = () => reject(new Error('地图SDK加载失败'));
         document.head.appendChild(script);
       });
     }
 
-    // Step 3: 创建地图实例
-    const AMap = (window as any).AMap;
-    const map = new AMap.Map(mapContainer.value, {
+    // 创建地图实例
+    const map = new (window as any).AMap.Map(mapContainer.value, {
       center: [parseFloat(lng), parseFloat(lat)],
       zoom: 17,
     });
 
-    // Step 4: 添加标记
-    const marker = new AMap.Marker({
+    // 添加标记
+    map.add(new (window as any).AMap.Marker({
       position: [parseFloat(lng), parseFloat(lat)],
       title: props.place,
-    });
-    map.add(marker);
-  } catch (e) {
-    error.value = '地图加载失败，请检查网络或API KEY配置';
+    }));
+  } catch (e: any) {
+    error.value = `地图加载失败: ${e.message || '请检查网络连接'}`;
   }
 });
 </script>
