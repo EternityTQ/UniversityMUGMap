@@ -1,6 +1,7 @@
 ---
 title: 高校地图
 icon: bookmark
+index: false
 ---
 
 这里是高校地图的入口
