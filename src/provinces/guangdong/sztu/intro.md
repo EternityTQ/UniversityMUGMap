@@ -1,5 +1,5 @@
 ---
-title: 主页
+title: 学校主页
 icon: pen-to-square
 ---
 
