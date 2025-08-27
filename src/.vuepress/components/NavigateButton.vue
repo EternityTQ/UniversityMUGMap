@@ -12,7 +12,7 @@ const props = defineProps<{
   name?: string;
 }>();
 
-const GAODE_KEY = '806ca801ce71fb304cd5fbf0bc8b1597'; // 必须填你高德 Web API 的 key
+const GAODE_KEY = '3e266c3a1cc478bc9146cfaa0550844a'; // 必须填你高德 Web API 的 key
 
 const navigate = async () => {
   try {

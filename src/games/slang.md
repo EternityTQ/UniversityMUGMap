@@ -5,9 +5,7 @@ icon: comment
 
 此章节下，将会针对一些常见的街机音游黑话、术语进行讲解，方便毫无街机游玩经验的新人快速了解街机音游
 
-更多资料，请查阅↓
-
-https://mzh.moegirl.org.cn/%E9%9F%B3%E4%B9%90%E6%B8%B8%E6%88%8F/%E7%94%A8%E8%AF%AD
+更多资料，[请查阅这里](https://mzh.moegirl.org.cn/%E9%9F%B3%E4%B9%90%E6%B8%B8%E6%88%8F/%E7%94%A8%E8%AF%AD)
 
 
 
