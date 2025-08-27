@@ -7,7 +7,7 @@ export default hopeTheme({
   hostname: "",
 
   author: {
-    name: "佚名",
+    name: "TQ",
   },
 
   logo: "https://theme-hope-assets.vuejs.press/logo.svg",

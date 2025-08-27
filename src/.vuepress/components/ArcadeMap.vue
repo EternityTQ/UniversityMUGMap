@@ -13,7 +13,7 @@ const props = defineProps<{ place: string }>();
 const mapContainer = ref<HTMLDivElement | null>(null);
 const error = ref('');
 // VuePress 环境变量访问方式
-const GAODE_KEY = '806ca801ce71fb304cd5fbf0bc8b1597';
+const GAODE_KEY = '	3e266c3a1cc478bc9146cfaa0550844a';
 const CACHE_EXPIRY = 24 * 60 * 60 * 1000;
 
 // 获取地理编码（带缓存）
